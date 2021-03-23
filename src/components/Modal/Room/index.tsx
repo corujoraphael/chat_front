@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Modal from '../index'
 import css from './styles.module.scss'
 import { createRoom, editRoom, removeRoom } from '../../../http/room'
@@ -14,30 +14,43 @@ const ModalRoom: React.FC<{
 	const [ title, setTitle ] = useState<string>(room ? room.name : '')
 	const [ description, setDescription ] = useState<string>(room ? room.description : '')
 	const [ errors, setErrors ] = useState<{title?: string}>({})
-	const [ titleChange, setTitleChange ] = useState<boolean>(false)
+	const [ sended, setSended ] = useState<boolean>(false)
+
 
 	const changeTitle = (e: React.FormEvent<HTMLInputElement>) => {
 		let value = e.currentTarget.value
 		setTitle(value)
-		setTitleChange(true)
-		setErrors(state => {
-			delete state.title
-			if (!value || value === '')
-				state.title = "Digite um titulo válido"
-			return state
-		})
 	}
+
+	const validate = {
+		title: () => {
+			let newErrors = {...errors}
+			delete newErrors.title
+			if (!title || title === '')
+				newErrors.title = "Digite um titulo válido"
+			setErrors(newErrors)
+
+		}
+	}
+
+	useEffect(() => {
+		if (title != '')
+	   		validate.title()
+	}, [ title ])
 
 	const changeDescription = (e: React.FormEvent<HTMLTextAreaElement>) => {
 		setDescription(e.currentTarget.value)
 	}
 
-	const hasErros = () =>  Object.keys(errors).length > 0
+	const validateForm = () =>  {
+		return Object.keys(errors).length == 0
+
+	}
 
 	const saveRoom = (e: React.MouseEvent) => {
 		e.preventDefault()
-		if (titleChange && !hasErros()){
-			let request = null;
+		if (validateForm()){
+			let request = null
 			if (id)
 				request = editRoom({
 					id,
@@ -54,8 +67,6 @@ const ModalRoom: React.FC<{
 				success(res.data, id ? 'edit' : 'add')
 				closeModal()
 			}).catch(err => alert(err))
-		} else {
-			alert("Digite um título")
 		}
 	}
 
@@ -101,7 +112,7 @@ const ModalRoom: React.FC<{
 					<button 
 						className={css['cp-modal-room__action']}
 						type="submit"
-						disabled={ Object.keys(errors).length > 0 }
+						disabled={ title === "" || Object.keys(errors).length > 0 }
 						onClick={ saveRoom }
 					>
 						Salvar

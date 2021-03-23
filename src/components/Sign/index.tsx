@@ -10,6 +10,7 @@ const Sign: React.FC = () => {
 	const [ password, setPassword ] = useState<string>('')
 	const [ name, setName ] = useState<string>('')
 	const [ newUser, setNewUser ] = useState<boolean>(false)
+	const [ sended, setSended ] = useState<boolean>(false)
 	const [ errors, setErrors ] = useState<{email?: string, name?: string, password?: string}>({})
 
 	const changeEmail = (e: React.FormEvent<HTMLInputElement>) => {
@@ -30,47 +31,54 @@ const Sign: React.FC = () => {
 		password?: string
 	}
 
-	const validate = {
-		email: () => {
-			let newErrors = {...errors}
-			delete newErrors.email
-			if (email == '' || !(/\S+@\S+\.\S+/g).test(email))
-				newErrors.email = "Digite um email válido"
-			setErrors(newErrors)
-
-		},
-		name: () => {
-			let newErrors = {...errors}
-			delete newErrors.name
-			if (newUser && name == '')
-				newErrors.name = "Digite um nome válido"
-			setErrors(newErrors)
-		},
-		password: () => {
-			let newErrors = {...errors}
-			delete newErrors.password
-			if (password == '')
-				newErrors.password = "Digite uma senha válido"
+	useEffect( () => {
+		let error: string | null = null
+		if (email === '' || !(/\S+@\S+\.\S+/g).test(email))
+			error = "Digite um email válido"
 		
-			if (password.length < 5 || password.length >= 15 )
-				newErrors.password = "Sua senha deve ter entre 6 e 15 digitos"
-			setErrors(newErrors)
-		},
-	}
+		setErrors( state => {
+			if (error)
+				return {...state, email: error}
+			delete state.email
+			return state
+		})
+	}, [ email ])
 
-	const validateForm = () => {
-		let error: ErroType = {}
+	useEffect( () => {
+		if (newUser){
+			let error: string | null = null
+			if (newUser && name === '')
+				error = "Digite um nome válido"
+			setErrors( state => {
+				if (error)
+					return {...state, name: error}
+				delete state.name
+				return state
+			})
+		}
+	}, [ newUser, name ])	
+
+	useEffect( () => {
+		let error: string | null = null
+		if (password === '')
+			error = "Digite uma senha válido"
+	
+		if (password.length < 5 || password.length >= 15 )
+			error = "Sua senha deve ter entre 6 e 15 digitos"
 		
-		validate.email();
-		validate.name();
-		validate.password();
-			
-		setErrors(error)
+		setErrors( state => {
+			if (error)
+				return {...state, password: error}
+			delete state.password
+			return state
+		})
 
-		return Object.keys(error).length == 0
-	}
+	}, [password])
+
+	const validateForm = () => Object.keys(errors).length === 0
 
 	const handleLogin = () => {
+		setSended(true)
 		if (validateForm())
 			login({
 				email,
@@ -81,13 +89,14 @@ const Sign: React.FC = () => {
 					window.location.href = '/rooms'
 				}
 			}).catch( e => {
-				if (e.response.status === 422 && e.response.data.errCode ==='not_exists')
+				if (e.response.status === 422 && e.response.data.errCode === 'not_exists')
 					return alert("Usuário ou senha incorretos!")
 				alert("Ocorreu um erro. Tente novamente!")
 			})
 	}
 
 	const handleSignup = () => {
+		setSended(true)
 		if (validateForm())
 			createAccount({
 				email,
@@ -105,21 +114,6 @@ const Sign: React.FC = () => {
 			})
 
 	}
-
-	useEffect(() => {
-		if (email != '')
-	   		validateForm()
-	}, [ email ]);
-
-	useEffect(() => {
-		if (password != '')
-	   		validateForm()
-	}, [ password ]);
-
-	useEffect(() => {
-		if (name != '')
-	   		validateForm()
-	}, [ name ]);
 
 	const handleSubmit = (e: React.MouseEvent) => {
 		e.preventDefault()
@@ -144,34 +138,34 @@ const Sign: React.FC = () => {
 				{ newUser && 
 					<div>
 						<input 
-							className={`${css['cp-sign__input']}  ${errors.name ? css['error'] : ''}`}
+							className={`${css['cp-sign__input']}  ${sended &&errors.name ? css['error'] : ''}`}
 							type="text" 
 							placeholder="Nome" 
 							value = { name }
 							onChange={ changeName }
 							onInput={ changeName }
 						/>
-						{errors.name && <p className={css['cp-sign__error']}> {errors.name} </p> }
+						{sended && errors.name && <p className={css['cp-sign__error']}> {errors.name} </p> }
 					</div>
 				}
 				<input 
-					className={`${css['cp-sign__input']}  ${errors.email ? css['error'] : ''}`}
+					className={`${css['cp-sign__input']}  ${sended &&errors.email ? css['error'] : ''}`}
 					type="email" 
 					placeholder="Email" 
 					value = { email }
 					onChange={ changeEmail }
 					onInput={ changeEmail }
 				/>
-				{errors.email && <p className={css['cp-sign__error']}> {errors.email} </p> }
+				{sended && errors.email && <p className={css['cp-sign__error']}> {errors.email} </p> }
 				<input
-					className={`${css['cp-sign__input']} ${errors.password ? css['error'] : ''}`}
+					className={`${css['cp-sign__input']} ${sended &&errors.password ? css['error'] : ''}`}
 					type="password"
 					placeholder="Senha"
 					value={ password }
 					onChange={ changePassword }
 					onInput={ changePassword }
 				/>
-				{errors.password && <p className={css['cp-sign__error']}> {errors.password} </p> }
+				{sended && errors.password && <p className={css['cp-sign__error']}> {errors.password} </p> }
 
 				<button 
 					className={css['cp-sign__action']}
