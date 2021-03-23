@@ -1,0 +1,43 @@
+@import '../../global/index.scss';
+
+.cp-message{
+	background-color: #fff;
+	position: relative;
+	padding: 10px;
+	min-width: 30%;
+	border-radius: 10px;
+	margin: 10px 15% 10px 0;
+
+	@media #{$md}{
+		margin: 10px 40% 10px 0;
+	}
+
+	&__sender{
+		background-color: #d4edce;
+		margin: 10px 0 10px 15%;
+
+		@media #{$md}{
+			margin: 10px 0 10px 40%;
+		}
+	}
+
+	&__user{
+		color: $primary;
+		font-weight: 900;
+		font-size: 12px;
+		overflow: hidden;
+		white-space: nowrap;
+		margin-bottom: 5px;
+		cursor: pointer;
+	}
+
+	&__message{
+		text-align: justify;
+	}
+
+	&__time{
+		text-align: right;
+		color: $gray;
+		font-size: 12px;
+	}
+}
