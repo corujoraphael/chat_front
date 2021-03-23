@@ -1,0 +1,11 @@
+@import '../../global/index.scss';
+
+.pg-auth{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	@media #{$md}{
+		height: 100vh;
+	}
+}
