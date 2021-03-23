@@ -14,7 +14,6 @@ const ModalRoom: React.FC<{
 	const [ title, setTitle ] = useState<string>(room ? room.name : '')
 	const [ description, setDescription ] = useState<string>(room ? room.description : '')
 	const [ errors, setErrors ] = useState<{title?: string}>({})
-	const [ sended, setSended ] = useState<boolean>(false)
 
 
 	const changeTitle = (e: React.FormEvent<HTMLInputElement>) => {
@@ -34,7 +33,7 @@ const ModalRoom: React.FC<{
 	}
 
 	useEffect(() => {
-		if (title != '')
+		if (title !== '')
 	   		validate.title()
 	}, [ title ])
 
@@ -43,7 +42,7 @@ const ModalRoom: React.FC<{
 	}
 
 	const validateForm = () =>  {
-		return Object.keys(errors).length == 0
+		return Object.keys(errors).length === 0
 
 	}
 

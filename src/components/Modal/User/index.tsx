@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Modal from '../index'
 import css from './styles.module.scss'
-import { createRoom, editRoom, removeRoom } from '../../../http/room'
+import { createRoom } from '../../../http/room'
 import { UserType } from '../../../interfaces' 
 
 const ModalUser: React.FC<{closeModal: () => void, user: UserType}> = ({ closeModal, user }) => {

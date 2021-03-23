@@ -25,12 +25,6 @@ const Sign: React.FC = () => {
 		setName(e.currentTarget.value)
 	}
 
-	interface ErroType {
-		email?: string
-		name?: string
-		password?: string
-	}
-
 	useEffect( () => {
 		let error: string | null = null
 		if (email === '' || !(/\S+@\S+\.\S+/g).test(email))

@@ -5,7 +5,6 @@ import RoomsPage from './pages/Rooms'
 import ChatPage from './pages/Chat'
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { PrivateRoute } from './route/PrivateRoute';
-import { getUser } from './services/auth'
 		
 
 const App: React.FC = () => {
