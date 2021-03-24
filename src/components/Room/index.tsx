@@ -12,12 +12,12 @@ const Room: React.FC<{room: RoomType, handleEdit: (room: RoomType) => void}> = (
 		<a href={`/room/${room.id}`} className={css['cp-room__room']}>
 			<img 
 				className={css['cp-room__avatar']} 
-				src={`https://ui-avatars.com/api/?background=random&name=${ room.user_to ? room.user_to.name : room.name }`} 
+				src={`https://ui-avatars.com/api/?background=random&name=${ room.user_to ? ( room.user_to_id == user.id ? room.owner.name : room.user_to.name  ) : room.name }`} 
 				alt={`Avatar ${ room.name }`}
 			/>
 			<div className={css['cp-room__info']} >
 				<h5 className={css['cp-room__title']} >
-					{ room.user_to ? room.user_to.name : room.name }
+					{ room.user_to ? ( room.user_to_id == user.id ? room.owner.name : room.user_to.name  ) : room.name }
 				</h5>
 				{ !room.user_to &&
 					<p className={css['cp-room__desc']} >

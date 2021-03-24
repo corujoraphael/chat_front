@@ -9,6 +9,7 @@ interface Room {
 	name: string;
 	description: string;
 	owner_id: number;
+	owner: User;
 	user_to_id: number;
 	user_to: User;
 }
