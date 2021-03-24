@@ -9,6 +9,10 @@ Chat para multiplos usuários em tempo real com as funcionalidades:
   
 A aplicação pode ser acessada em http://134.209.223.242:3000
 
+### Usuários iniciais para teste 
+ - maria@teste.com  senha: 123456
+ - joao@teste.com   senha: 123456
+
 ## Tecnologias
 
   - Reac
