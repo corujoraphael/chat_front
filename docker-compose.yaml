@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  # NGIX SERVER
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: front_codeChallenge
+    stdin_open: true
+    tty: true
+    ports:
+      - 3000:3000
